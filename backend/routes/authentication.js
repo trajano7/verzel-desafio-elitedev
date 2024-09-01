@@ -1,16 +1,15 @@
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const {
   hashPassword,
   isValidPassword,
   createToken,
 } = require("../utils/authentication");
 const { getUserByUsername, addNewUser } = require("../utils/dbAccess");
-const { isValidString, isValidUsername } = require("../utils/validation");
+const { isValidLength, isValidUsername, validateAuthPayload } = require("../utils/validation");
 
 const router = express.Router();
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", validateAuthPayload, async (req, res, next) => {
   const { username, password } = req.body;
 
   let userData;
@@ -23,6 +22,7 @@ router.post("/login", async (req, res, next) => {
     });
   }
 
+
   const isPasswordValid = await isValidPassword(password, userData.PasswordHash);
   if (!isPasswordValid) {
     return res.status(401).json({
@@ -31,18 +31,11 @@ router.post("/login", async (req, res, next) => {
     });
   }
 
-  const token = createToken(userData.UserID);
+  const token = createToken(userData.UserID, userData.Username);
   res.json({ token });
 });
 
-// username e password
-// se nao existe um usuario com mesmo nome
-// verificar se a senha esta buena
-// verificar se o nome e usuario esta bueno
-// hash da senha
-// armazenar
-// return
-router.post("/register", async (req, res, next) => {
+router.post("/register", validateAuthPayload,  async (req, res, next) => {
   const { username, password } = req.body;
 
   let errors = {};
@@ -61,7 +54,7 @@ router.post("/register", async (req, res, next) => {
     }
   } catch (error) {}
 
-  if (!isValidString(password, 5)) {
+  if (!isValidLength(password, 5)) {
     errors.password = "Senha inválida. Deve conter no mínimo 5 caracteres.";
   }
 

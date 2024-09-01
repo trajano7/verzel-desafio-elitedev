@@ -14,8 +14,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(moviesRoutes);
 app.use(authRoutes);
+app.use(moviesRoutes);
 
 app.use((error, req, res, next) => {
   const status = error.status || 500;
