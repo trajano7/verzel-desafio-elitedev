@@ -16,6 +16,7 @@ async function connectToDb() {
   return connection;
 }
 
+// Generic get function
 async function get(query, params) {
   const connection = await connectToDb();
 
@@ -55,6 +56,7 @@ async function getUserById(userId) {
   return result[0];
 }
 
+// Retrieves user favorites list based on the username
 async function getFavoriteListByUsername(username) {
   const sqlQuery = `
   SELECT M.* FROM Favorite F JOIN Movie M ON F.MovieID = M.MovieID JOIN User U ON F.UserID = U.UserID WHERE U.Username = ?;`;
@@ -62,12 +64,27 @@ async function getFavoriteListByUsername(username) {
   const result = await get(sqlQuery, [username]);
 
   if (!result.length) {
-    throw new NotFoundError("No favorite movies found for the specified user.");
+    return [];
   }
 
   return result;
 }
 
+// Retrieves user favorites list IDs based on the UserID
+async function getFavoriteListIDs(userID) {
+  const sqlQuery = `
+  SELECT M.MovieID FROM Favorite F JOIN Movie M ON F.MovieID = M.MovieID JOIN User U ON F.UserID = U.UserID WHERE U.UserID = ?;`;
+
+  const result = await get(sqlQuery, [userID]);
+
+  if (!result.length) {
+    return [];
+  }
+
+  return result;
+}
+
+// Retrieve a movie by its ID
 async function getMovieByID(movieID) {
   const result = await get(`SELECT * FROM Movie WHERE MovieID = ?;`, [movieID]);
 
@@ -78,6 +95,7 @@ async function getMovieByID(movieID) {
   return result[0];
 }
 
+// Generic set function
 async function set(query, params) {
   const connection = await connectToDb();
 
@@ -93,6 +111,7 @@ async function set(query, params) {
   return setResult;
 }
 
+// Add new user to the database
 async function addNewUser(username, password) {
   const sqlQuery = `INSERT INTO User (UserID, Username, PasswordHash) VALUES (UUID(), ?, ?)`;
   const params = [username, password];
@@ -100,12 +119,12 @@ async function addNewUser(username, password) {
   await set(sqlQuery, params);
 }
 
+// Add new movie to the database 
 async function addNewMovie(movieData) {
-  const sqlQuery = `INSERT INTO Movie (MovieID, Title, Overview, ReleaseDate, Rating, PosterPath) VALUES (?, ?, ?, ?, ?, ?)`;
+  const sqlQuery = `INSERT INTO Movie (MovieID, Title, ReleaseDate, Rating, PosterPath) VALUES (?, ?, ?, ?, ?)`;
   const params = [
     movieData.id,
     movieData.title,
-    movieData.overview,
     movieData.release,
     movieData.rating,
     movieData.posterPath,
@@ -114,6 +133,7 @@ async function addNewMovie(movieData) {
   await set(sqlQuery, params);
 }
 
+// Add new favorite to user list
 async function addNewFavorite(userID, movieID) {
   const sqlQuery = `INSERT IGNORE INTO Favorite (UserID, MovieID) VALUES (?, ?)`;
   const params = [userID, movieID];
@@ -121,6 +141,7 @@ async function addNewFavorite(userID, movieID) {
   await set(sqlQuery, params);
 }
 
+// Delete a movie from user favorites list
 async function deleteFavoriteMovie(userID, movieID) {
   const sqlQuery = `DELETE FROM Favorite WHERE UserID = ? AND MovieID = ?`;
   const params = [userID, movieID];
@@ -128,6 +149,7 @@ async function deleteFavoriteMovie(userID, movieID) {
   await set(sqlQuery, params);
 }
 
+// Change the visibility flag in User table
 async function toggleVisibility(userID, newVisibility) {
   const sqlQuery = `UPDATE User SET ProfileVisibility = ? WHERE UserID = ?;`
   const params = [newVisibility, userID];
@@ -144,3 +166,4 @@ exports.addNewMovie = addNewMovie;
 exports.addNewFavorite = addNewFavorite;
 exports.deleteFavoriteMovie = deleteFavoriteMovie;
 exports.toggleVisibility = toggleVisibility;
+exports.getFavoriteListIDs = getFavoriteListIDs;

@@ -9,6 +9,7 @@ const { isValidLength, isValidUsername, validateAuthPayload } = require("../util
 
 const router = express.Router();
 
+// Route responsible for authenticate a user
 router.post("/login", validateAuthPayload, async (req, res, next) => {
   const { username, password } = req.body;
 
@@ -18,7 +19,7 @@ router.post("/login", validateAuthPayload, async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       message: "Invalid Credentials",
-      errors: { credentials: "Invalid username or password entered." },
+      errors: { credentials: "Nome de usuário ou senha inválidos" },
     });
   }
 
@@ -27,14 +28,16 @@ router.post("/login", validateAuthPayload, async (req, res, next) => {
   if (!isPasswordValid) {
     return res.status(401).json({
       message: "Invalid Credentials",
-      errors: { credentials: "Invalid username or password entered." },
+      errors: { credentials: "Nome de usuário ou senha inválidos." },
     });
   }
 
+  const profileVisibility = userData.ProfileVisibility
   const token = createToken(userData.UserID, userData.Username);
-  res.json({ token });
+  res.status(201).json({ message: "Usuário logado com sucesso..", token, profileVisibility });
 });
 
+// Route responsible for register a new user
 router.post("/register", validateAuthPayload,  async (req, res, next) => {
   const { username, password } = req.body;
 
@@ -67,10 +70,14 @@ router.post("/register", validateAuthPayload,  async (req, res, next) => {
 
   try {
     await addNewUser(username, await hashPassword(password));
-    res.status(201).json({ message: "Usuário cadastrado com sucesso." });
   } catch (error) {
     next(error);
   }
+
+  const userData = getUserByUsername(username);
+
+  const token = createToken(userData.UserID, userData.Username);
+  res.status(201).json({ message: "Usuário cadastrado com sucesso.", token, profileVisibility: "public" });
 });
 
 module.exports = router;
