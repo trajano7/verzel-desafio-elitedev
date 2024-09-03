@@ -10,7 +10,7 @@ function PaginationLink({ pageCount }) {
   const page = parseInt(query.get('page') || '1', 10);
   return (
     <Pagination 
-      sx={{ margin: "0 auto", marginBottom: "5rem" }}
+      sx={{ margin: "0 auto", marginBottom: "5rem", marginTop: "3rem" }}
       page={page}
       count={pageCount}
       renderItem={(item) => (

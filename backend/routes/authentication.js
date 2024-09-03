@@ -6,6 +6,7 @@ const {
 } = require("../utils/authentication");
 const { getUserByUsername, addNewUser } = require("../utils/dbAccess");
 const { isValidLength, isValidUsername, validateAuthPayload } = require("../utils/validation");
+const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
@@ -41,12 +42,16 @@ router.post("/login", validateAuthPayload, async (req, res, next) => {
 router.post("/register", validateAuthPayload,  async (req, res, next) => {
   const { username, password } = req.body;
 
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa4")
+
   let errors = {};
   const isUsernameValid = isValidUsername(username);
   if (!isUsernameValid) {
     errors.username =
       "O nome de usuário é inválido. Deve ter entre 3 e 20 caracteres e pode conter apenas letras, números, pontos, underscores e hífens. Não pode conter espaços em branco.";
   }
+
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa3")
 
   try {
     if (isUsernameValid) {
@@ -61,6 +66,8 @@ router.post("/register", validateAuthPayload,  async (req, res, next) => {
     errors.password = "Senha inválida. Deve conter no mínimo 5 caracteres.";
   }
 
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa2")
+
   if (Object.keys(errors).length > 0) {
     return res.status(422).json({
       message: "Falha ao se registrar devido a erros de validação.",
@@ -68,16 +75,17 @@ router.post("/register", validateAuthPayload,  async (req, res, next) => {
     });
   }
 
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa1")
+
+  const userID = uuidv4();
   try {
-    await addNewUser(username, await hashPassword(password));
+    await addNewUser(username, await hashPassword(password), userID);
   } catch (error) {
     next(error);
   }
 
-  const userData = getUserByUsername(username);
-
-  const token = createToken(userData.UserID, userData.Username);
-  res.status(201).json({ message: "Usuário cadastrado com sucesso.", token, profileVisibility: "public" });
+  const token = createToken(userID, username);
+  return res.status(201).json({ message: "Usuário cadastrado com sucesso.", token, profileVisibility: "public" });
 });
 
 module.exports = router;

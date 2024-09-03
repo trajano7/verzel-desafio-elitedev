@@ -78,6 +78,7 @@ async function getFavoriteListIDs(userID) {
   const result = await get(sqlQuery, [userID]);
 
   if (!result.length) {
+    console.log("aqui");
     return [];
   }
 
@@ -103,6 +104,7 @@ async function set(query, params) {
   try {
     const [result] = await connection.execute(query, params);
     setResult = result;
+    console.log(result)
   } catch (error) {
     console.log(`Error in SET query. More details: ${error}`);
     throw new Error("Internal server error.");
@@ -112,9 +114,9 @@ async function set(query, params) {
 }
 
 // Add new user to the database
-async function addNewUser(username, password) {
-  const sqlQuery = `INSERT INTO User (UserID, Username, PasswordHash) VALUES (UUID(), ?, ?)`;
-  const params = [username, password];
+async function addNewUser(username, password, userID) {
+  const sqlQuery = `INSERT INTO User (UserID, Username, PasswordHash) VALUES (?, ?, ?)`;
+  const params = [userID, username, password];
 
   await set(sqlQuery, params);
 }

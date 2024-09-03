@@ -13,6 +13,10 @@ export async function fetchIDList(token) {
     },
   });
 
+  if (response.status === 404) {
+    return "NOT FOUND";
+  }
+
   if (!response.ok) {
     throw json(
       { message: "Could not fetch favorites IDs." },

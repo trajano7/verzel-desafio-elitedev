@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS MoviesDB;
+USE MoviesDB
 
 CREATE TABLE User (
     UserID VARCHAR(36) PRIMARY KEY,
@@ -11,7 +12,8 @@ CREATE TABLE Movie (
     MovieID BIGINT PRIMARY KEY,
     Title VARCHAR(255),  
     ReleaseDate DATETIME,  
-    Rating DECIMAL(5,4)
+    Rating DECIMAL(5,4),
+    PosterPath VARCHAR(255)
 );
 
 CREATE TABLE Favorite (

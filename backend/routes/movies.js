@@ -88,7 +88,7 @@ router.get("/movies/:id", async (req, res, next) => {
 });
 
 // Get user favorite list by username
-// If the profile is public, return the list to everyone; 
+// If the profile is public, return the list to everyone;
 // if the profile is private, return the list only to the owner.
 router.get(
   "/favorites/:username",
@@ -114,7 +114,7 @@ router.get(
       res.json({
         message: "Favorite movie list successfully retrieved.",
         data: {
-          movies: formattedList
+          movies: formattedList,
         },
       });
     } catch (error) {
@@ -130,16 +130,24 @@ router.use(checkAuthMiddleware);
 router.get("/favorites/", async (req, res, next) => {
   const userID = req.token.userID;
 
-  let response;
   let userData;
   try {
-    response = await getFavoriteListIDs(userID);
     userData = await getUserById(userID);
   } catch (error) {
-    next(error);
+    return next(error)
   }
 
-  const idList = response.map((item) => item.MovieID);
+  let response;
+  try {
+    response = await getFavoriteListIDs(userID);
+  } catch (error) {
+    return next(error);
+  }
+
+  let idList = [];
+  if (response) {
+    idList = response.map((item) => item.MovieID);
+  }
 
   res.json({
     message: "Favorite IDs list successfully retrieved.",
@@ -198,7 +206,7 @@ router.patch("/favorites", async (req, res, next) => {
   const { visibility } = req.body;
 
   if (!isValidProfileVisibility(visibility)) {
-    res.status(400).json({
+    return res.status(400).json({
       message:
         "Bad request: Invalid profile visibility value. Must be 'public' or 'private'.",
     });

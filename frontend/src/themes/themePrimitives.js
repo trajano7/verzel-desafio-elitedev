@@ -104,6 +104,6 @@ export const getDesignTokens = (mode) => ({
   },
   shadows: [
     "none",
-    "hsla(220, 30%, 5%, 0.7) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.8) 0px 8px 16px -5px",
+    "hsla(220, 30%, 5%, 0) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0) 0px 8px 16px -5px",
   ],
 });

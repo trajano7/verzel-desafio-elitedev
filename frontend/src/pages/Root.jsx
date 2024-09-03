@@ -15,6 +15,9 @@ const RootPage = ({ mode, toggleMode }) => {
   useEffect(() => {
     const fetchData = async  () => {
       const data = await fetchIDList(token);
+      if (data === "NOT FOUND") {
+        return;
+      }
       setFavoritesList(data.favoritesIDList);
       setProfileVisibility(data.profileVisibility);
     }
