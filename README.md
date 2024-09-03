@@ -22,13 +22,6 @@ Este projeto é uma aplicação web desenvolvida como parte do **Desafio Verzel*
 - Express
 - MySQL
 
-## Pré-requisitos
-
-Antes de iniciar, certifique-se de ter o seguinte instalado:
-
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-
 ## Como Executar o Projeto
 
 ### Pré-requisitos
@@ -101,8 +94,10 @@ Antes de iniciar, certifique-se de ter o seguinte instalado:
 
 7. **Instale as dependências e execute o Front-End:**
 
+   Abra outro terminal no diretorio do projeto e execute:
+
    ```bash
-   cd ../frontend
+   cd frontend
    npm install
    npm run dev
    ```
