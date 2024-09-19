@@ -11,6 +11,7 @@ import PaginationLink from "../components/PageManager";
 import { useEffect } from "react";
 import { useAuthCtx } from "../store/AuthContext";
 import PageContent from "../components/PageContent";
+import { apiRequest } from "../services/apiService";
 
 const HomePage = () => {
   const submit = useSubmit();
@@ -80,19 +81,11 @@ export async function loader({ request, params }) {
   }
 
   const currentPage = page ? page : "";
-  const response = await fetch(
-    "http://localhost:3000/movies/?query=" + query + "&page=" + currentPage
-  );
-
-  if (!response.ok) {
-    throw json(
-      { message: "Could not fetch movies for the query." },
-      {
-        status: response.status,
-      }
-    );
-  } else {
-    const resData = await response.json();
-    return resData.data;
+  const endpoint = `movies/?query=${query}&page=${currentPage}`;
+  try {
+    const response = await apiRequest(endpoint);
+    return response.data;
+  } catch (error) {
+    throw json({ message: "Something went wrong." }, { status: 500 });
   }
 }

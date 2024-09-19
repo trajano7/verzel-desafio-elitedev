@@ -3,21 +3,14 @@ const {
   checkAuthMiddleware,
   checkProfileVisibility,
   checkProfileOwner,
-} = require("../utils/authentication");
-const { getMoviesBySearch, getAPIMovieByID } = require("../utils/apiHandler");
-const { NotFoundError } = require("../utils/errors");
-const {
-  getFavoriteList,
-  addNewMovie,
-  addNewFavorite,
-  deleteFavoriteMovie,
-  toggleVisibility,
-  getFavoriteListIDs,
-  getUserById,
-} = require("../utils/dbAccess");
-const { isMovieStored } = require("../utils/dbUtils");
-const { isValidProfileVisibility } = require("../utils/validation");
-const { formatMovieData } = require("../utils/formatData");
+} = require("../utils/authUtils");
+const { isValidProfileVisibility } = require("../utils/validationUtils");
+const { formatMovieData } = require("../utils/formatUtils");
+const { getFavoriteListByUsername, getFavoriteListIDs, addNewFavorite, deleteFavorite } = require("../models/modelFavorites");
+const { addNewMovie, checkMovieExists } = require("../models/modelMovies");
+const { toggleVisibility, getUserById } = require("../models/modelUser");
+const { getMoviesBySearch, getAPIMovieByID } = require("../services/tmdbServices");
+
 
 const router = express.Router();
 
@@ -99,7 +92,7 @@ router.get(
     const username = req.params["username"];
 
     try {
-      const favoriteList = await getFavoriteList(username);
+      const favoriteList = await getFavoriteListByUsername(username);
 
       const formattedList = favoriteList.map((movie) => {
         return {
@@ -169,7 +162,7 @@ router.post("/favorites", async (req, res, next) => {
   }
 
   try {
-    const movieIsStored = await isMovieStored(movieID);
+    const movieIsStored = await checkMovieExists(movieID);
     if (!movieIsStored) {
       const movieData = await getAPIMovieByID(movieID);
       const formattedMovie = {
@@ -194,7 +187,7 @@ router.delete("/favorites/:movieID", async (req, res, next) => {
   const movieID = req.params.movieID;
 
   try {
-    await deleteFavoriteMovie(userID, movieID);
+    await deleteFavorite(userID, movieID);
     res.json({ message: "Movie successfully deleted from favorites." });
   } catch (error) {
     next(error);

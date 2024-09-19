@@ -1,16 +1,22 @@
 import { json } from "react-router-dom";
 import { CustomError } from "../errors/CustomError";
 
-export const apiRequest = async (endpoint, method = "GET", body = null, headers = {}) => {
-  const url = `http://localhost:3000/${endpoint}`; // TODO: por url no env
+export const apiRequest = async (
+  endpoint,
+  method = "GET",
+  body = null,
+  headers = {}
+) => {
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const url = `${baseURL}/${endpoint}`; // TODO: por url no env
 
   const options = {
     method,
     headers: {
       "Content-Type": "application/json",
-      ...headers
+      ...headers,
     },
-    body: body ? JSON.stringify(body) : null
+    body: body ? JSON.stringify(body) : null,
   };
 
   try {
@@ -28,6 +34,6 @@ export const apiRequest = async (endpoint, method = "GET", body = null, headers 
     return await response.json();
   } catch (error) {
     console.error("Erro ao fazer requisição:", error);
-    throw error; 
+    throw error;
   }
 };

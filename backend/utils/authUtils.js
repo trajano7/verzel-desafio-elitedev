@@ -1,8 +1,9 @@
 require("dotenv").config();
 const { sign, verify } = require("jsonwebtoken");
 const { compare, hash } = require("bcryptjs");
-const { NotAuthError, NotFoundError } = require("./errors");
-const { getUserByUsername } = require("./dbAccess");
+const { NotAuthError, NotFoundError } = require("../errors/errors");
+const { getUserByUsername } = require("../models/modelUser");
+// const { getUserByUsername } = require("./dbAccess");
 
 const secretKey = process.env.SECRET_KEY || "You_Will_Never_Guess";
 

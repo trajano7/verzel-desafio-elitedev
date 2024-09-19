@@ -3,10 +3,10 @@ const {
   hashPassword,
   isValidPassword,
   createToken,
-} = require("../utils/authentication");
-const { getUserByUsername, addNewUser } = require("../utils/dbAccess");
-const { isValidLength, isValidUsername, validateAuthPayload } = require("../utils/validation");
+} = require("../utils/authUtils");
+const { isValidLength, isValidUsername, validateAuthPayload } = require("../utils/validationUtils");
 const { v4: uuidv4 } = require('uuid');
+const { getUserByUsername, addNewUser } = require("../models/modelUser");
 
 const router = express.Router();
 
