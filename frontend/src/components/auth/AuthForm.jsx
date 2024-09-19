@@ -1,10 +1,14 @@
 import {
+  alpha,
   Box,
   Button,
   FormControl,
   InputAdornment,
+  InputBase,
   InputLabel,
   OutlinedInput,
+  styled,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -27,6 +31,10 @@ const AuthForm = () => {
   const [searchParams] = useSearchParams();
   const isLogin = searchParams.get("mode") === "login";
   const isSubmitting = navigation.state === "submitting";
+  let buttonText = isLogin ? "Entrar" : "Registrar";
+  if (isSubmitting) {
+    buttonText = "Submitting...";
+  }
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -39,38 +47,44 @@ const AuthForm = () => {
       method="post"
     >
       <Typography
-        variant="h2"
-        sx={{ marginBottom: "2rem", textAlign: "center" }}
+        variant="h6"
+        sx={{ marginBottom: ".5rem", textAlign: "center" }}
       >
         {isLogin ? "Entre na sua conta" : "Crie uma conta"}
       </Typography>
       {data && data.errors && (
-        <ul style={{ listStyle: "none", margin: "0", padding: "0", marginBottom: "1rem" }}>
+        <ul
+          style={{
+            listStyle: "none",
+            margin: "0",
+            padding: "0",
+            marginBottom: "1rem",
+          }}
+        >
           {Object.values(data.errors).map((err) => (
             <li key={err}>{err}</li>
           ))}
         </ul>
       )}
-      <FormControl sx={{ width: "100%", display: "block" }} variant="outlined">
-        <InputLabel htmlFor="username">Username</InputLabel>
-        <OutlinedInput
-          id="username"
-          name="username"
-          type="text"
-          label="Username"
-          required
-          sx={{ width: "100%", marginBottom: "1rem" }}
-        />
-      </FormControl>
-      <FormControl sx={{ width: "100%", display: "block" }} variant="outlined">
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <OutlinedInput
-          id="password"
-          name="password"
-          type={showPassword ? "text" : "password"}
-          sx={{ width: "100%", marginBottom: "1rem" }}
-          required
-          endAdornment={
+      <TextField
+        size="small"
+        id="username"
+        name="username"
+        type="text"
+        label="Username"
+        required
+        sx={{ width: "100%", marginBottom: "1rem" }}
+      />
+      <TextField
+        id="password"
+        name="password"
+        size="small"
+        type={showPassword ? "text" : "password"}
+        sx={{ width: "100%", marginBottom: "1rem" }}
+        required
+        label="Password"
+        InputProps={{
+          endAdornment: (
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle password visibility"
@@ -80,12 +94,19 @@ const AuthForm = () => {
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
-          }
-          label="Password"
-        />
-      </FormControl>
+          ),
+        }}
+      />
+
       <Box sx={{ textAlign: "right" }}>
-        <Link to={`?mode=${isLogin ? "register" : "login"}`}>
+        <Link
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            display: "inline",
+          }}
+          to={`?mode=${isLogin ? "register" : "login"}`}
+        >
           {isLogin ? "Create new user" : "Login"}
         </Link>
         <Button
@@ -95,7 +116,7 @@ const AuthForm = () => {
           disabled={isSubmitting}
           sx={{ marginLeft: "1rem" }}
         >
-          {isSubmitting ? "Submitting..." : "Entrar"}
+          {buttonText}
         </Button>
       </Box>
     </Form>

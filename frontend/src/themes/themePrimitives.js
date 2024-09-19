@@ -1,3 +1,4 @@
+import { red } from "@mui/material/colors";
 import { createTheme, alpha } from "@mui/material/styles";
 
 const customTheme = createTheme();
@@ -34,6 +35,11 @@ export const getDesignTokens = (mode) => ({
     primary: {
       contrastText: brand[50],
       light: brand[300],
+      main: brand[400],
+      dark: brand[900],
+    },
+    info: {
+      light: brand[100],
       main: brand[400],
       dark: brand[900],
     },

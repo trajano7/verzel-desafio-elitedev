@@ -24,7 +24,6 @@ router.post("/login", validateAuthPayload, async (req, res, next) => {
     });
   }
 
-
   const isPasswordValid = await isValidPassword(password, userData.PasswordHash);
   if (!isPasswordValid) {
     return res.status(401).json({
@@ -42,16 +41,12 @@ router.post("/login", validateAuthPayload, async (req, res, next) => {
 router.post("/register", validateAuthPayload,  async (req, res, next) => {
   const { username, password } = req.body;
 
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa4")
-
   let errors = {};
   const isUsernameValid = isValidUsername(username);
   if (!isUsernameValid) {
     errors.username =
       "O nome de usuário é inválido. Deve ter entre 3 e 20 caracteres e pode conter apenas letras, números, pontos, underscores e hífens. Não pode conter espaços em branco.";
   }
-
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa3")
 
   try {
     if (isUsernameValid) {
@@ -66,16 +61,12 @@ router.post("/register", validateAuthPayload,  async (req, res, next) => {
     errors.password = "Senha inválida. Deve conter no mínimo 5 caracteres.";
   }
 
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa2")
-
   if (Object.keys(errors).length > 0) {
     return res.status(422).json({
       message: "Falha ao se registrar devido a erros de validação.",
       errors,
     });
   }
-
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa1")
 
   const userID = uuidv4();
   try {

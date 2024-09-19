@@ -1,18 +1,16 @@
 import "./App.css";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import RootPage, { loader as rootLoader } from "./pages/Root";
+import RootPage from "./pages/Root";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import getBlogTheme from "./themes/getAppTheme";
 import MoviePage, { loader as movieLoader } from "./pages/Movie";
 import HomePage, { loader as moviesLoader } from "./pages/Home";
-import AuthPage, { action as authAction } from "./pages/Auth";
-import { FavoritesProvider } from "./store/AuthContext";
-import FavoritesPage, {
-  action as favoritesAction,
-  loader as favoritesLoader,
-} from "./pages/Favorites";
-import { action as manipulateFavoriteAction } from "./util/authUtil";
+import { AuthCtxProvider } from "./store/AuthContext";
+import FavoritesPage, { loader as favoritesLoader } from "./pages/Favorites";
 import ErrorPage from "./pages/Error";
+import { action as authAction } from "./actions/authAction";
+import { action as moviesAction } from "./actions/moviesAction";
+import AuthPage from "./pages/Auth";
 
 const router = createBrowserRouter([
   {
@@ -20,13 +18,12 @@ const router = createBrowserRouter([
     element: <RootPage />,
     errorElement: <ErrorPage />,
     id: "root",
-    loader: rootLoader,
     children: [
       {
         index: true,
         element: <HomePage />,
         loader: moviesLoader,
-        action: manipulateFavoriteAction,
+        action: moviesAction,
       },
       {
         path: "/auth",
@@ -37,12 +34,12 @@ const router = createBrowserRouter([
         path: "/movies/:movieID",
         element: <MoviePage />,
         loader: movieLoader,
-        action: manipulateFavoriteAction,
+        action: moviesAction,
       },
       {
         path: "/:username/favoritos",
         element: <FavoritesPage />,
-        action: favoritesAction,
+        action: moviesAction,
         loader: favoritesLoader,
       },
     ],
@@ -55,9 +52,9 @@ function App() {
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
-      <FavoritesProvider>
+      <AuthCtxProvider>
         <RouterProvider router={router} />
-      </FavoritesProvider>
+      </AuthCtxProvider>
     </ThemeProvider>
   );
 }

@@ -18,20 +18,13 @@ export const inputsCustomizations = {
               variant: "contained",
             },
             style: {
-              color: "white",
-              backgroundColor: gray[900],
+              color: gray[50],
+              backgroundColor: brand[700],
               "&:hover": {
                 backgroundImage: "none",
-                backgroundColor: gray[700],
+                backgroundColor: brand[800],
                 boxShadow: "none",
               },
-              ...theme.applyStyles("dark", {
-                color: gray[50],
-                backgroundColor: brand[700],
-                "&:hover": {
-                  backgroundColor: brand[800],
-                },
-              }),
             },
           },
           {
@@ -41,26 +34,15 @@ export const inputsCustomizations = {
             style: {
               color: theme.palette.text.primary,
               border: "1px solid",
-              borderColor: gray[200],
-              backgroundColor: alpha(gray[50], 0.3),
+              backgroundColor: gray[800],
+              borderColor: gray[700],
               "&:hover": {
-                backgroundColor: gray[100],
-                borderColor: gray[300],
+                backgroundColor: "hsl(0, 100%, 97%)",
+                borderColor: gray[600],
               },
               "&:active": {
-                backgroundColor: gray[200],
+                backgroundColor: "hsl(0, 100%, 97%)",
               },
-              ...theme.applyStyles("dark", {
-                backgroundColor: gray[800],
-                borderColor: gray[700],
-                "&:hover": {
-                  backgroundColor: gray[900],
-                  borderColor: gray[600],
-                },
-                "&:active": {
-                  backgroundColor: gray[900],
-                },
-              }),
             },
           },
           {
@@ -68,69 +50,33 @@ export const inputsCustomizations = {
               variant: "text",
             },
             style: {
-              color: gray[600],
+              color: gray[50],
               fontWeight: 600,
               fontSize: ".75rem",
               "&:hover": {
-                backgroundColor: gray[100],
+                backgroundColor: gray[700],
               },
               "&:active": {
-                backgroundColor: gray[200],
+                backgroundColor: alpha(gray[700], 0.7),
               },
-              ...theme.applyStyles("dark", {
-                color: gray[50],
-                "&:hover": {
-                  backgroundColor: gray[700],
-                },
-                "&:active": {
-                  backgroundColor: alpha(gray[700], 0.7),
-                },
-              }),
             },
           },
         ],
       }),
     },
   },
-  MuiIconButton: {
+  MuiTextField: {
     styleOverrides: {
       root: ({ theme }) => ({
-        boxShadow: "none",
-        textTransform: "none",
-        fontWeight: theme.typography.fontWeightMedium,
-        letterSpacing: 0,
-        color: theme.palette.text.primary,
-        "&:hover": {
-          backgroundColor: gray[100],
-          borderColor: gray[300],
+        "& .MuiOutlinedInput-input": {
+          "&:-webkit-autofill": {
+            backgroundColor: "transparent !important",
+            WebkitBoxShadow: `0 0 0 100px hsl(216, 18%, 6%) inset`,
+            WebkitTextFillColor: theme.palette.text.primary,
+            caretColor: theme.palette.text.primary,
+            borderRadius: theme.shape.borderRadius,
+          },
         },
-        ...theme.applyStyles("dark", {
-          "&:hover": {
-            backgroundColor: gray[500],
-          },
-        }),
-        variants: [
-          {
-            props: {
-              size: "small",
-            },
-            style: {
-              width: "2.25rem",
-              height: "2.25rem",
-              padding: "0.25rem",
-              [`& .${svgIconClasses.root}`]: { fontSize: "1rem" },
-            },
-          },
-          {
-            props: {
-              size: "medium",
-            },
-            style: {
-              width: "2.5rem",
-              height: "2.5rem",
-            },
-          },
-        ],
       }),
     },
   },

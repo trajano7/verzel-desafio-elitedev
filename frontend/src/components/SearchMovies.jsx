@@ -38,7 +38,7 @@ const SearchMovies = ({ onSearch }) => {
         variant="h6"
         sx={{ textAlign: "center", marginBottom: ".5rem" }}
       >
-        Digite o nome do filme
+        Busque por um filme!
       </Typography>
       <Box
         style={{

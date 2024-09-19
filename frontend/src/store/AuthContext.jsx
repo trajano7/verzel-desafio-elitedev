@@ -1,21 +1,22 @@
 import React, { createContext, useState, useContext } from "react";
 
-// Cria o contexto
-const FavoritesContext = createContext();
+const AuthContext = createContext();
 
-// Provedor do contexto
-export const FavoritesProvider = ({ children }) => {
+export const AuthCtxProvider = ({ children }) => {
   const [username, setUsername] = useState("");
   const [favorites, setFavorites] = useState([]);
   const [isPublic, setIsPublic] = useState(true);
+  const [sessionStatus, setSessionStatus] = useState("initial");
+
+  const setSessionData = ({ username, idList, visibility }) => {
+    setUsername(username);
+    setFavorites(idList);
+    setProfileVisibility(visibility);
+    setSessionStatus("loggedin");
+  };
 
   const setProfileVisibility = (profileVisibility) => {
     setIsPublic(profileVisibility === "public");
-  };
-
-  // Atualiza o nome de usuário
-  const updateUsername = (newUsername) => {
-    setUsername(newUsername);
   };
 
   // Adiciona um filme aos favoritos
@@ -30,35 +31,31 @@ export const FavoritesProvider = ({ children }) => {
     );
   };
 
-  // Substitui a lista de favoritos com uma nova lista
-  const setFavoritesList = (newFavoritesList) => {
-    setFavorites(newFavoritesList);
-  };
-
-  const clearCtx = () => {
+  const clearCtx = (logOutStatus = "loggedout") => {
     setUsername("");
     setFavorites([]);
     setIsPublic(true);
+    setSessionStatus(logOutStatus);
   };
 
   return (
-    <FavoritesContext.Provider
+    <AuthContext.Provider
       value={{
         setProfileVisibility,
         isPublic,
         clearCtx,
         username,
-        updateUsername,
         favorites,
         addFavorite,
         removeFavorite,
-        setFavoritesList,
+        setSessionData,
+        sessionStatus,
       }}
     >
       {children}
-    </FavoritesContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 // Hook personalizado para usar o contexto
-export const useFavorites = () => useContext(FavoritesContext);
+export const useAuthCtx = () => useContext(AuthContext);

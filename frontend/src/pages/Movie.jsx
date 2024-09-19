@@ -1,11 +1,12 @@
 import { Box, Container, Typography } from "@mui/material";
 import MovieDetails from "../components/MovieDetails";
 import { json, useLoaderData, useNavigate, useSubmit } from "react-router-dom";
-import { useFavorites } from "../store/AuthContext";
+import { useAuthCtx } from "../store/AuthContext";
+import { apiRequest } from "../services/apiService";
 
 const MoviePage = () => {
   const submit = useSubmit();
-  const { removeFavorite, addFavorite } = useFavorites();
+  const { removeFavorite, addFavorite } = useAuthCtx();
   const movie = useLoaderData();
 
   const onDeleteHandler = (movieID) => {
@@ -29,19 +30,16 @@ export default MoviePage;
 
 export async function loader({ request, params }) {
   const id = params.movieID;
+  const endpoint = "movies/" + id;
 
-  const response = await fetch('http://localhost:3000/movies/' + id);
-
-  if (!response.ok) {
-    throw json(
-      { message: 'Could not fetch details for selected movie.' },
-      {
-        status: response.status,
-      }
-    );
-  } else {
-    const resData = await response.json();
-    return resData.movie;
+  try {
+    const response = await apiRequest(endpoint);
+    return response.movie;
+  } catch (error) {
+    if (error.status && error.status === 404) {
+      throw error;
+    }
+    throw json({ message: "Something went wrong." }, { status: 500 });
   }
 }
 

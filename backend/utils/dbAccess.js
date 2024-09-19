@@ -78,7 +78,6 @@ async function getFavoriteListIDs(userID) {
   const result = await get(sqlQuery, [userID]);
 
   if (!result.length) {
-    console.log("aqui");
     return [];
   }
 
@@ -104,7 +103,6 @@ async function set(query, params) {
   try {
     const [result] = await connection.execute(query, params);
     setResult = result;
-    console.log(result)
   } catch (error) {
     console.log(`Error in SET query. More details: ${error}`);
     throw new Error("Internal server error.");

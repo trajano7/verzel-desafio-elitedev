@@ -8,7 +8,7 @@ const secretKey = process.env.SECRET_KEY || "You_Will_Never_Guess";
 
 // Create a authentication token
 function createToken(userID, username) {
-  return sign({ userID, username }, secretKey, { expiresIn: "1h" });
+  return sign({ userID, username }, secretKey, { expiresIn: "12h" });
 }
 
 // Validate the token

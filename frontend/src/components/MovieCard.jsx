@@ -5,6 +5,7 @@ import {
   CardContent,
   CardMedia,
   IconButton,
+  styled,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -12,12 +13,29 @@ import StarIcon from "@mui/icons-material/Star";
 import { useNavigate, useParams } from "react-router-dom";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import { useFavorites } from "../store/AuthContext";
+import { useAuthCtx } from "../store/AuthContext";
+
+const MovieCardIconButton = styled(IconButton)(({ theme }) => ({
+  width: "2.25rem",
+  height: "2.25rem",
+  padding: "0.25rem",
+  backgroundColor: "hsl(216, 18%, 12%, 0.8)",
+  position: "absolute",
+  top: 165,
+  left: 95,
+  zIndex: 1000,
+  "& .MuiSvgIcon-root": {
+    fontSize: "1rem",
+  },
+  "&:hover": {
+    backgroundColor: "hsl(216, 18%, 3%, 0.9)",
+  },
+}));
 
 const MovieCard = ({ data, onDelete, onAdd }) => {
+  const sessionCtx = useAuthCtx();
+  const { favorites, username: usernameCtx } = sessionCtx;
   const { username } = useParams();
-  const user = localStorage.getItem("username");
-  const { favorites } = useFavorites();
   const navigate = useNavigate();
   const releaseDate = new Date(data.release);
   const formattedDate = releaseDate.toLocaleDateString("pt-BR", {
@@ -28,7 +46,7 @@ const MovieCard = ({ data, onDelete, onAdd }) => {
 
   let formattedRating = Number(data.rating).toPrecision(2);
   const isFavorite = favorites.includes(data.id);
-  const showFavBttn = (!username && user) || (username === user)
+  const showFavBttn = (!username && usernameCtx) || username === usernameCtx;
 
   const clickCardHandler = () => {
     navigate(`/movies/${data.id}`);
@@ -52,7 +70,7 @@ const MovieCard = ({ data, onDelete, onAdd }) => {
         position: "relative",
       }}
     >
-      {(showFavBttn) && (
+      {showFavBttn && (
         <Tooltip
           title={
             isFavorite
@@ -60,24 +78,12 @@ const MovieCard = ({ data, onDelete, onAdd }) => {
               : "Adicionar aos meus favoritos"
           }
         >
-          <IconButton
-            onClick={onFavoriteButton}
-            sx={{
-              position: "absolute",
-              top: 165,
-              left: 95,
-              backgroundColor: "hsl(216, 18%, 12%, 0.8)",
-              "&:hover": {
-                backgroundColor: "hsl(216, 18%, 3%, 9)",
-              },
-              zIndex: "1000",
-            }}
-          >
+          <MovieCardIconButton onClick={onFavoriteButton}>
             {!isFavorite && (
               <FavoriteBorderRoundedIcon style={{ color: "white" }} />
             )}
             {isFavorite && <FavoriteRoundedIcon style={{ color: "white" }} />}
-          </IconButton>
+          </MovieCardIconButton>
         </Tooltip>
       )}
       <CardActionArea onClick={clickCardHandler}>

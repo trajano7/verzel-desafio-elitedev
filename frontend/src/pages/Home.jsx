@@ -9,13 +9,12 @@ import {
 } from "react-router-dom";
 import PaginationLink from "../components/PageManager";
 import { useEffect } from "react";
-import { useFavorites } from "../store/AuthContext";
-import { getAuthToken } from "../util/authUtil";
+import { useAuthCtx } from "../store/AuthContext";
 import PageContent from "../components/PageContent";
 
 const HomePage = () => {
   const submit = useSubmit();
-  const { removeFavorite, addFavorite } = useFavorites();
+  const { removeFavorite, addFavorite } = useAuthCtx();
   const navigate = useNavigate();
   const data = useLoaderData();
 
@@ -54,8 +53,8 @@ const HomePage = () => {
     >
       <SearchMovies onSearch={searchHandler} />
       {notFound && (
-        <PageContent title={"Not Found!"}>
-          Nenhum resultado encontrado para a pesquisa
+        <PageContent title={""}>
+          Nenhum resultado encontrado para sua pesquisa
         </PageContent>
       )}
       {(!notFound && !noQuery) && (
@@ -78,9 +77,6 @@ export async function loader({ request, params }) {
 
   if (!query) {
     return null;
-    return {
-      error: "No query."
-    };
   }
 
   const currentPage = page ? page : "";

@@ -6,16 +6,16 @@ import Header from '../components/Header';
 function ErrorPage() {
   const error = useRouteError();
 
-  let title = 'An error occurred!';
-  let message = 'Something went wrong!';
+  let title = 'Ocorreu um erro!';
+  let message = 'Algo deu errado!';
 
   if (error.status === 500) {
     message = error.data.message;
   }
 
   if (error.status === 404) {
-    title = 'Not found!';
-    message = 'Could not find resource or page.';
+    title = 'Página não encontrada';
+    message = 'Desculpe, a página que você está procurando não existe ou foi removida.';
   }
 
   return (

@@ -152,6 +152,7 @@ router.get("/favorites/", async (req, res, next) => {
   res.json({
     message: "Favorite IDs list successfully retrieved.",
     favoritesIDList: idList,
+    username: userData.Username,
     profileVisibility: userData.ProfileVisibility,
   });
 });

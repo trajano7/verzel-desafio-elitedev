@@ -3,7 +3,7 @@ import Rating from "./Rating";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import MovieInfo from "./MovieInfo";
-import { useFavorites } from "../store/AuthContext";
+import { useAuthCtx } from "../store/AuthContext";
 
 const StyledButton = styled(Button)(({ theme, color = "primary" }) => ({
   backgroundColor: "hsla(47, 84%, 51%, 1)",
@@ -18,8 +18,7 @@ const StyledButton = styled(Button)(({ theme, color = "primary" }) => ({
 }));
 
 const MovieDetails = ({ movieData, onDelete, onAdd }) => {
-  const user = localStorage.getItem("username");
-  const { favorites } = useFavorites();
+  const { favorites, username } = useAuthCtx();
 
   const isFavorite = favorites.includes(movieData.id);
   const formattedRating = Number(movieData.rating).toPrecision(2);
@@ -70,7 +69,7 @@ const MovieDetails = ({ movieData, onDelete, onAdd }) => {
             variant="contained"
             endIcon={favoriteIcon}
             onClick={onFavoriteButton}
-            disabled={!user}
+            disabled={!username}
           >
             {!isFavorite ? "Adicionar aos Favoritos" : "Está na sua lista"}
           </StyledButton>

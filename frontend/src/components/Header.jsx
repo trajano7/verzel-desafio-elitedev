@@ -1,27 +1,18 @@
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
-  IconButton,
-  Menu,
-  MenuItem,
   styled,
   Toolbar,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useState } from "react";
-import PersonIcon from "@mui/icons-material/Person";
 import { Link, useNavigate, useSubmit } from "react-router-dom";
-import { useFavorites } from "../store/AuthContext";
-import { clearLocalStorage } from "../util/authUtil";
+import { useAuthCtx } from "../store/AuthContext";
+import { clearLocalStorage } from "../util/authUtils";
 
 const loggedinOptions = ["Meus Favortios", "Sair"];
 const loggedoutOptions = ["Entrar/Registrar"];
@@ -35,7 +26,7 @@ const AppTitle = styled(Typography)(({ theme }) => ({
 const Header = ({ mode, toggleMode }) => {
   const navigate = useNavigate();
   const dummyFlag = false;
-  const { username, clearCtx } = useFavorites();
+  const { username, clearCtx } = useAuthCtx();
 
   const menuOptions = dummyFlag ? loggedinOptions : loggedoutOptions;
 
