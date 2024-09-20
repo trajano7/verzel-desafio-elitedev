@@ -23,7 +23,7 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Running in port ${PORT}`);

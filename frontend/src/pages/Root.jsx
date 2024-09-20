@@ -27,16 +27,24 @@ const RootPage = ({ mode, toggleMode }) => {
     }
   }, [sessionStatus]);
 
-  let warningMsg = "Autenticação realizada com sucesso!";
-  if (sessionStatus === "expired") {
-    warningMsg = "Sessão expirada.";
+  let warningMsg = "";
+  switch (sessionStatus) {
+    case "expired":
+      warningMsg = "Sessão expirada.";
+      break;
+    case "loggedout":
+      warningMsg = "Sessão encerrada.";
+      break;
+    case "loggedin":
+      warningMsg = "Autenticação realizada com sucesso!";
+      break;
   }
 
   return (
     <>
       <WarningMessage
         message={warningMsg}
-        open={isOpen}
+        open={isOpen && warningMsg}
         onClose={warningTimeoutHandler}
       />
       <Header mode={mode} toggleMode={toggleMode} />

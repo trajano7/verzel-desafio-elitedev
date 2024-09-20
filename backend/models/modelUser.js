@@ -25,6 +25,15 @@ async function getUserById(userId) {
   return result[0];
 }
 
+// Check if a user exists based on the username provided
+async function userExists(username) {
+  const result = await get(`SELECT COUNT(*) as count FROM User WHERE Username = ?;`, [
+    username,
+  ]);
+
+  return result[0].count > 0; 
+}
+
 // Add new user to the database
 async function addNewUser(username, password, userID) {
   const sqlQuery = `INSERT INTO User (UserID, Username, PasswordHash) VALUES (?, ?, ?)`;
@@ -41,4 +50,4 @@ async function toggleVisibility(userID, newVisibility) {
   await set(sqlQuery, params);
 }
 
-module.exports = { getUserByUsername, getUserById, addNewUser, toggleVisibility };
+module.exports = { getUserByUsername, getUserById, addNewUser, toggleVisibility, userExists };

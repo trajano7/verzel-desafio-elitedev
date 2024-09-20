@@ -5,7 +5,7 @@ const { connectToDb } = require("./dbConnection");
 async function get(query, params) {
   const connection = await connectToDb();
   let resultList;
-
+  
   try {
     const [rows] = await connection.execute(query, params);
     resultList = rows;
