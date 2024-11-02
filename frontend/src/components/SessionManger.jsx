@@ -10,13 +10,12 @@ const SessionManager = () => {
   const token = getAuthToken();
 
   const logInHandler = async () => {
-    const username = localStorage.getItem("username");
     const data = await fetchUserData(token);
     if (data) {
       setSessionData({
         username: data.username,
         idList: data.favoritesIDList,
-        visibility: data.profileVisibility,
+        visibility: data.isPrivate,
       });
     }
   };

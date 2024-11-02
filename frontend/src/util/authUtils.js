@@ -15,7 +15,6 @@ export function getAuthToken() {
 
 export const storeAuthData = (resData, username) => {
   const token = resData.token;
-  const profileVisibility = resData.profileVisibility;
 
   localStorage.setItem("token", token);
   const expiration = new Date();

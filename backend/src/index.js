@@ -2,6 +2,8 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const moviesRoutes = require("./routes/movies");
 const authRoutes = require("./routes/authentication");
+const favoriteRoutes = require("./routes/favorite");
+const { errorHandler } = require("./middlewares/error");
 require("dotenv").config();
 
 const app = express();
@@ -16,15 +18,7 @@ app.use((req, res, next) => {
 
 app.use(authRoutes);
 app.use(moviesRoutes);
+app.use(favoriteRoutes);
+app.use(errorHandler);
 
-app.use((error, req, res, next) => {
-  const status = error.status || 500;
-  const message = error.message || "Something went wrong.";
-  res.status(status).json({ message: message });
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Running in port ${PORT}`);
-});
+module.exports = app

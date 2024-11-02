@@ -44,7 +44,7 @@ const RootPage = ({ mode, toggleMode }) => {
     <>
       <WarningMessage
         message={warningMsg}
-        open={isOpen && warningMsg}
+        open={isOpen && warningMsg !== ""}
         onClose={warningTimeoutHandler}
       />
       <Header mode={mode} toggleMode={toggleMode} />

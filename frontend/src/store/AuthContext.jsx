@@ -5,7 +5,7 @@ const AuthContext = createContext();
 export const AuthCtxProvider = ({ children }) => {
   const [username, setUsername] = useState("");
   const [favorites, setFavorites] = useState([]);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPrivate, setIsPrivate] = useState(true);
   const [sessionStatus, setSessionStatus] = useState("initial");
 
   const setSessionData = ({ username, idList, visibility }) => {
@@ -15,8 +15,8 @@ export const AuthCtxProvider = ({ children }) => {
     setSessionStatus("loggedin");
   };
 
-  const setProfileVisibility = (profileVisibility) => {
-    setIsPublic(profileVisibility === "public");
+  const setProfileVisibility = (visibility) => {
+    setIsPrivate(visibility);
   };
 
   // Adiciona um filme aos favoritos
@@ -34,7 +34,7 @@ export const AuthCtxProvider = ({ children }) => {
   const clearCtx = (logOutStatus = "loggedout") => {
     setUsername("");
     setFavorites([]);
-    setIsPublic(true);
+    setIsPrivate(false);
     setSessionStatus(logOutStatus);
   };
 
@@ -42,7 +42,7 @@ export const AuthCtxProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         setProfileVisibility,
-        isPublic,
+        isPrivate,
         clearCtx,
         username,
         favorites,

@@ -19,7 +19,7 @@ Este projeto é uma aplicação web desenvolvida como parte do **Desafio Verzel*
 - MUI
 - React Router
 - Node.js
-- Express
+- ExpressJS
 - MySQL
 
 ## Como Executar o Projeto
@@ -46,20 +46,14 @@ Antes de iniciar, certifique-se de ter o seguinte instalado:
    cd verzel-desafio-elitedev
    ```
 
-3. **Execute o script para criação do banco de dados:**
-
-   ```bash
-   mysql -u <User> -p < ./db/init.sql
-   ```
-
-4. **Crie um arquivo .env no diretorio de Back-End:**
+3. **Crie um arquivo .env no diretorio do Back-End:**
 
    ```bash
    cd backend
    touch .env
    ```
 
-5. **Configure as variáveis de ambiente:**
+4. **Configure as variáveis de ambiente:**
 
    Para utilizar a API do TMDB e configurar o banco de dados, é necessário criar um arquivo `.env` na pasta `/backend` com o seguinte conteúdo:
 
@@ -69,8 +63,9 @@ Antes de iniciar, certifique-se de ter o seguinte instalado:
    DB_HOST=localhost
    DB_USER=<Seu_User_MySql>
    DB_PASSWORD=<Sua_Senha_MySql>
-   DB_NAME=MoviesDB
+   DB_NAME=movies_db
    DB_PORT=3306
+   DB_DIALECT=mysql
    PORT=3000
    ```
 
@@ -83,18 +78,46 @@ Antes de iniciar, certifique-se de ter o seguinte instalado:
 
    Você pode obter sua chave aqui: [Documentação API TMDB](https://developer.themoviedb.org/v4/reference/intro/getting-started).
 
-6. **Instale as dependências e execute o Back-End:**
+5. **Instale as dependências do projeto:**
 
    ```bash
    npm install
+   ```
+
+6. **Execute as migrations para criar o banco de dados e as tabelas:**
+
+   Primeiro, navegue até a pasta src:
+
+   ```bash
+   cd src
+   ```
+   
+   Em seguinda, certifique-se de que o banco de dados esteja criado usando o comando:
+
+   ```bash
+   npx sequelize-cli db:create
+   ```
+
+   Por fim, execute as migrations para criar as tabelas definidas nas suas migrações:
+
+   ```bash
+   npx sequelize-cli db:migrate
+   ```
+
+   Isso aplicará todas as migrations pendentes e criará as tabelas no banco de dados.
+
+7. **Volte para pasta root e execute o Back-End:**
+
+   ```bash
+   cd ..
    npm start
    ```
 
    O Back-End deve executar na porta 3000.
 
-7. **Instale as dependências e execute o Front-End:**
+8. **Instale as dependências e execute o Front-End:**
 
-   Abra outro terminal no diretorio do projeto e execute:
+   Abra outro terminal no diretorio root do projeto e execute:
 
    ```bash
    cd frontend

@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,9 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.0",
     "node-fetch": "^3.3.2",
+    "sequelize": "^6.37.4",
+    "sequelize-cli": "^6.6.2",
+    "sqlite3": "^5.1.7",
     "uuid": "^10.0.0"
   }
 }

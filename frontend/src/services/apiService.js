@@ -8,8 +8,7 @@ export const apiRequest = async (
   headers = {}
 ) => {
   const baseURL = import.meta.env.VITE_REACT_APP_URL || "http://localhost:3000";
-  console.log(baseURL, import.meta.env.VITE_REACT_APP_URL)
-  const url = `${baseURL}/${endpoint}`; // TODO: por url no env
+  const url = `${baseURL}/${endpoint}`; 
 
   const options = {
     method,

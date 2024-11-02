@@ -44,6 +44,7 @@ const MovieCard = ({ data, onDelete, onAdd }) => {
     year: "numeric",
   });
 
+
   let formattedRating = Number(data.rating).toPrecision(2);
   const isFavorite = favorites.includes(data.id);
   const showFavBttn = (!username && usernameCtx) || username === usernameCtx;

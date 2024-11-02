@@ -12,8 +12,10 @@ export async function action({ request }) {
   }
 
   const isDelete = method === "DELETE";
-  const body = !isDelete ? Object.fromEntries(data.entries()) : null;
-  const endpoint = "favorites" + (isDelete ? `/${data.get("movieID")}` : "");
+  const isPatch = method === "PATCH";
+  const isPost = method === "POST";
+  const body = isPost ? Object.fromEntries(data.entries()) : null;
+  const endpoint = (isPatch ? "profile" : "favorites") + (isDelete ? `/${data.get("movieID")}` : "");
 
   try {
     await apiRequest(endpoint, method, body, {

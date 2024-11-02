@@ -15,16 +15,14 @@ import { useParams, useSubmit } from "react-router-dom";
 const FavoriteHeader = () => {
   const submit = useSubmit();
   const sessionCtx = useAuthCtx();
-  const { isPublic, setProfileVisibility, username: usernameCtx } = sessionCtx;
-  const text = isPublic ? "Public List" : "Private List";
-  const bttnIcon = isPublic ? <LockOpenRoundedIcon /> : <LockRoundedIcon />;
+  const { isPrivate, setProfileVisibility, username: usernameCtx } = sessionCtx;
+  const text = !isPrivate ? "Public List" : "Private List";
+  const bttnIcon = !isPrivate ? <LockOpenRoundedIcon /> : <LockRoundedIcon />;
   const { username } = useParams();
 
   const onVisibilityChange = () => {
-    const newValue = isPublic ? "private" : "public";
-    setProfileVisibility(newValue);
-    const fetchData = { visibility: newValue };
-    submit({ visibility: newValue }, { method: "PATCH" });
+    setProfileVisibility(!isPrivate);
+    submit({ visibility: !isPrivate }, { method: "PATCH" });
   };
 
   const isLoggedUserProfile = usernameCtx === username;
